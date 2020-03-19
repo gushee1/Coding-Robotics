@@ -1,0 +1,33 @@
+// Created on Thu March 19 2020
+int r_motor = 2;															//List of integers for motor ports, bumper ports, and 
+int l_motor = 0;																//motor speeds
+int l_bump = 8;
+int r_bump = 9;
+int mid_speed = 100;
+int slow_speed = 30;
+
+void forward() {																//Robot moves forward
+	motor(r_motor, mid_speed);
+	motor(l_motor, mid_speed);
+	}
+void right_turn() {															//Turns right in place
+	motor(l_motor, mid_speed);
+	motor(r_motor, -slow_speed);
+	}
+
+int main()
+{
+	printf("Hello, World!\n");												
+	while(digital(r_bump)==0) {										//Robot moves forward while neither sensor is activated
+		forward();
+		if(digital(r_bump)==1){											//Once right bumper is activated, stop moving forwards
+			break;																//Breaks out of while loop to enter next loop
+			}
+	}
+	ao();																			// Turns everything off to reset motion
+	while(digital(l_bump)==0) {										//Robot turns toward wall until left bumper is activated
+		right_turn();															//Turning right in place
+	}
+	
+	return 0;
+}
