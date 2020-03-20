@@ -1,0 +1,41 @@
+// Created on Fri March 20 2020
+int l_motor = 0;															//List of integers for motor ports, bumper ports,
+int r_motor = 2;														//reflectance ports, and motor speeds
+int l_bump = 8;
+int r_bump = 9;
+int l_reflect = 6;
+int high_speed = 100;
+int mid_speed = 50;
+int slow_speed = 10;
+
+void forward() {																//Robot moves forward
+	motor(r_motor, mid_speed);
+	motor(l_motor, mid_speed);
+	}
+void left_turn() {															//Robot turns left
+	motor(r_motor, high_speed);
+	motor(l_motor, slow_speed);
+}
+void right_turn() {															//Robot turns right
+	motor(r_motor, slow_speed);
+	motor(l_motor, high_speed);
+}
+int main()
+{
+	printf("Hello, World!\n");		
+	right_turn();
+	msleep(1200);							//Robot makes an intial right turn, aiming it to travel down the channel
+	while(digital(l_bump)==0) {		//Robot moves forward until left bumper is activated
+		forward();
+		if(digital(r_bump)==1) {			//If the right bumper is hit, robot briefly turns left and continues going forwrd
+			left_turn();
+			msleep(500);
+			}
+		if(analog(l_reflect)>500) {		//If the reflectance sensor sees the tape, robot turns right and goes forward
+			right_turn();
+			msleep(500);
+			}
+	}
+	ao();											//Once loop is broken from l_bump returning 1, robot turns off
+	return 0;
+}
