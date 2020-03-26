@@ -1,0 +1,65 @@
+// Created on Thu March 26 2020
+int l_motor = 0;																//List of integers for motor ports, bumper ports,
+int r_motor = 2;															//reflectance ports, and motor speeds
+int l_bump = 8;
+int r_bump = 9;
+int l_reflect = 5;
+int r_reflect = 6;
+int high_speed = 100;
+int mid_speed = 50;
+int slow_speed = 10;
+int fast_speed = 70;
+
+void forward() {																//Robot moves forward
+	motor(r_motor, mid_speed);
+	motor(l_motor, mid_speed);
+	}
+void backward() {															//Robot moves backwards
+	motor(r_motor, -mid_speed);
+	motor(l_motor, -mid_speed);
+	}
+void left_turn() {															//Robot turns left
+	motor(r_motor, high_speed);
+	motor(l_motor, slow_speed);
+}
+void right_turn() {															//Robot turns right
+	motor(r_motor, slow_speed);
+	motor(l_motor, mid_speed);
+}
+void right_veer() {															//Robot veers right
+	motor(r_motor, slow_speed);
+	motor(l_motor, high_speed);
+}
+void left_follow() {															//Robot follows left
+	motor(r_motor, mid_speed);
+	motor(l_motor, slow_speed);
+}
+	
+int main()
+{
+	printf("Hello, World!\n");		
+	right_turn();									//Robot makes an intial right turn, aiming it to travel to the line
+	msleep(400) ;							 
+	while (digital(l_bump)==0) {			//Robot moves forward until a bumper is activated
+		forward();
+		if (analog(l_reflect)>100) {			//When robot is on the black line, turns away from it
+			right_turn();
+			}
+			}
+	ao();												//After bumper is activated, turn off all motors
+	backward();									//Robot travels backwards to position for the turn
+	msleep(750);	
+	left_turn();										//Robot turns towards line
+	msleep(1100);
+	while (digital(l_bump)==0) {			//Robot moves forwards until left bumper is activated
+		forward();
+		if (analog(l_reflect)>400) {			//If the left sensor sees the line, turn slightly left
+			left_follow();
+			}
+		if (analog(r_reflect)>400) {			//If the right sensor sees the line, veer right
+			right_veer();
+			}
+	}
+	ao();												//Once bumper is activated, turn off bot
+	return 0;
+}
