@@ -1,0 +1,43 @@
+// Created on Thu April 2 2020
+int l_motor = 0;																//List of integers for motor ports, bumper ports,
+int r_motor = 2;															//reflectance ports, and motor speeds
+int r_range = 2;
+int r_reflect = 6;
+int counter = 0;
+int high_speed = 100;
+int low_speed = 10;
+
+void forward() {																//Robot moves forward
+	motor(r_motor, high_speed);
+	motor(l_motor, high_speed);
+	}
+void left_turn() {															//Robot turns left
+	motor(r_motor, high_speed);
+	motor(l_motor, low_speed);
+}
+void right_turn() {															//Robot turns right
+	motor(r_motor, low_speed);
+	motor(l_motor, high_speed);
+}
+int main() {
+	printf("Hello, World!\n");
+	while (counter < 4) {													//Robot moves until it has read 4 black lines
+		forward();
+		if (analog(r_range) > 300) {									//If the robot is too far from the wall, turn right
+			right_turn();
+			msleep(100);
+			}
+		if (analog(r_range) < 300) {									//If the robot is too close to the wall, turn left
+			left_turn();
+			msleep(100);
+			}
+		if (analog(r_reflect) > 500) {									//If the robot sees a black line, add to the counter
+			counter ++ ;
+			forward();
+			msleep(200);
+			printf("counting\n");
+			}
+		}
+		ao();																		//Once the robot has broken from the loop, stop moving
+	return 0;
+}
