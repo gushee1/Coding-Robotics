@@ -1,0 +1,28 @@
+// Created on Mon April 6 2020
+int r_motor = 2;															//List of integers for motor ports, and speeds
+int l_motor = 0;	
+int speed = 100;
+
+void forward() {																//Robot moves forward
+	motor(r_motor, speed);
+	motor(l_motor, speed);
+	}
+void backward() {															//Robot moves backward
+	motor(l_motor, -speed);
+	motor(r_motor, -speed);
+	}
+int main()
+{
+	printf("Hello, World!\n");
+	int number;
+	
+	for(number=1; number <=6; number++) {					//Robot follows this loop 6 times		
+		printf("Number is %d \n", number);							//Prints number that the robot is on, increases the number
+		forward();																//Goes forward
+		msleep(1000);
+		backward();															//Goes backward
+		msleep(800);
+		}
+		
+	return 0;
+}
